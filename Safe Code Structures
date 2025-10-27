@@ -1,0 +1,62 @@
+# Safe Code Structures
+
+Practical, ready-to-use scaffolding for secure patterns across languages. Drop these into your projects as starting points and extend as needed.
+
+## Layout
+```
+safe_code_structures/
+  python/
+    safe_subprocess.py   # safe command execution (no shell=True, timeout, allowlist)
+    safe_cli.py          # argparse-based CLI that uses the safe subprocess helper
+    safe_http.py         # urllib-based HTTP with timeouts and host allowlist
+    safe_sqlite.py       # parameterized SQLite queries and exec
+    demo_safe_python.py  # demo script using the helpers
+  go/
+    safe_exec.go         # context timeout + captured stdout/stderr
+  rust/
+    safe_exec.rs         # safe Command usage with best-effort timeout
+  zig/
+    safe_exec.zig        # ChildProcess with pipe capture and timeout
+  tensorflow/
+    safe_tensorflow.py   # optional helpers for deterministic runs and device guards
+```
+
+## Quickstart: Python
+```bash
+python3 safe_code_structures/python/demo_safe_python.py
+```
+
+## Quickstart: Go
+```bash
+cd safe_code_structures/go
+go run safe_exec.go
+```
+
+## Quickstart: Rust
+```bash
+# Example usage snippet (requires a Cargo project to compile)
+# Add safe_exec.rs to src/ and call safe_run(Duration::from_secs(3), "echo", &["hello"]).
+```
+
+## Quickstart: Zig
+```bash
+# Add safe_exec.zig to your project and call safeRun with argv and timeout.
+```
+
+## Quickstart: TensorFlow
+```python
+from safe_code_structures.tensorflow.safe_tensorflow import set_deterministic, safe_device
+set_deterministic(123)
+# with safe_device("/CPU:0"):
+#     ... run your model ...
+```
+
+## Security notes
+- Never pass untrusted strings to shells; always pass argv arrays to process APIs.
+- Use timeouts and allowlists for external commands.
+- Validate and sanitize all untrusted inputs (URLs, SQL parameters, file paths).
+- Use parameterized queries for databases; avoid string concatenation.
+- Treat TensorFlow `.eval()` method calls as strictly model tensor evaluation, not Python eval.
+
+## License
+MIT — see the repository `LICENSE`.
